@@ -10,18 +10,18 @@ const KEY = DEMO ? 'roach-pet-demo' : 'roach-pet-v1';
 
 /* ---------- data ---------- */
 const COLORS = [
-  { n: '초코 갈색', c1: '#d9a066', c2: '#7a3a18', c3: '#2c1408', leg: '#4a2810', price: 0 },
-  { n: '칠흑', c1: '#6a6a72', c2: '#26262b', c3: '#0b0b0e', leg: '#16161a', price: 0 },
-  { n: '크림', c1: '#fffaf0', c2: '#ece0c4', c3: '#b9a67e', leg: '#a8946a', price: 0 },
-  { n: '적갈색', c1: '#e88f66', c2: '#b4492a', c3: '#68230f', leg: '#8a3118', price: 0 },
-  { n: '숲 초록', c1: '#7fb98a', c2: '#2f5a3a', c3: '#12301c', leg: '#1f4128', price: 0 },
-  { n: '은빛', c1: '#f4f6f8', c2: '#aeb2b7', c3: '#666b72', leg: '#7a7f86', price: 0 },
-  { n: '하늘 파랑', c1: '#9cc9f5', c2: '#3d82d6', c3: '#1a4a8c', leg: '#2a5fae', price: 60 },
-  { n: '벚꽃 분홍', c1: '#ffc2d4', c2: '#e88aa8', c3: '#a8466a', leg: '#c76688', price: 60 },
-  { n: '포도 보라', c1: '#b99be3', c2: '#7b4fb3', c3: '#3f2070', leg: '#5a3694', price: 80 },
-  { n: '노을 주황', c1: '#ffbf86', c2: '#e87a2a', c3: '#9a3f0a', leg: '#c15a16', price: 80 },
-  { n: '황금', c1: '#fff0a0', c2: '#d8a521', c3: '#8a5e08', leg: '#b07c10', price: 150 },
-  { n: '무지개', c1: '#ffd0e8', c2: '#c06ae0', c3: '#4a2a9a', leg: '#7a44c4', price: 250, rainbow: true },
+  { n: '초코 갈색', c1: '#d9a066', c2: '#7a3a18', c3: '#2c1408', leg: '#4a2810', price: 0, filter: 'none' },
+  { n: '칠흑', c1: '#6a6a72', c2: '#26262b', c3: '#0b0b0e', leg: '#16161a', price: 0, filter: 'grayscale(1) contrast(1.2) brightness(.42)' },
+  { n: '크림', c1: '#fffaf0', c2: '#ece0c4', c3: '#b9a67e', leg: '#a8946a', price: 0, filter: 'grayscale(.2) sepia(.45) saturate(.5) brightness(1.72) contrast(.92)' },
+  { n: '적갈색', c1: '#e88f66', c2: '#b4492a', c3: '#68230f', leg: '#8a3118', price: 0, filter: 'hue-rotate(-18deg) saturate(1.35) brightness(.92)' },
+  { n: '숲 초록', c1: '#7fb98a', c2: '#2f5a3a', c3: '#12301c', leg: '#1f4128', price: 0, filter: 'hue-rotate(72deg) saturate(1.15) brightness(.9)' },
+  { n: '은빛', c1: '#f4f6f8', c2: '#aeb2b7', c3: '#666b72', leg: '#7a7f86', price: 0, filter: 'grayscale(1) brightness(1.42) contrast(1.15)' },
+  { n: '하늘 파랑', c1: '#9cc9f5', c2: '#3d82d6', c3: '#1a4a8c', leg: '#2a5fae', price: 60, filter: 'hue-rotate(185deg) saturate(1.2) brightness(1.05)' },
+  { n: '벚꽃 분홍', c1: '#ffc2d4', c2: '#e88aa8', c3: '#a8466a', leg: '#c76688', price: 60, filter: 'hue-rotate(-50deg) saturate(1.4) brightness(1.18)' },
+  { n: '포도 보라', c1: '#b99be3', c2: '#7b4fb3', c3: '#3f2070', leg: '#5a3694', price: 80, filter: 'hue-rotate(-110deg) saturate(1.25) brightness(.95)' },
+  { n: '노을 주황', c1: '#ffbf86', c2: '#e87a2a', c3: '#9a3f0a', leg: '#c15a16', price: 80, filter: 'hue-rotate(-8deg) saturate(1.45) brightness(1.08)' },
+  { n: '황금', c1: '#fff0a0', c2: '#d8a521', c3: '#8a5e08', leg: '#b07c10', price: 150, filter: 'sepia(.55) saturate(1.7) hue-rotate(8deg) brightness(1.22)' },
+  { n: '무지개', c1: '#ffd0e8', c2: '#c06ae0', c3: '#4a2a9a', leg: '#7a44c4', price: 250, filter: 'none', rainbow: true },
 ];
 const SNACKS = [
   { id: 'crumb', name: '부스러기', sym: 'i-crumb', happy: 4, xp: 5, price: 6, col: '#d9a85e', eat: '바삭바삭 맛있어요!' },
@@ -139,6 +139,8 @@ function applyColor() {
   const c = COLORS[S.color];
   pet.style.setProperty('--c1', c.c1); pet.style.setProperty('--c2', c.c2);
   pet.style.setProperty('--c3', c.c3); pet.style.setProperty('--leg', c.leg);
+  const art = $('roachArt');
+  if (art) art.style.filter = c.rainbow ? '' : (c.filter || 'none');
   pet.classList.toggle('rainbow', !!c.rainbow);
 }
 const dotBg = c => c.rainbow
@@ -272,10 +274,10 @@ $('lvUp').addEventListener('click', closeLvUp);
 let pose = { dx: 0, dy: 0, rot: 0, s: 1 };
 let annoyedUntil = 0, eatingUntil = 0;
 const dims = {};
-const BASE_ROT = 26;
+const BASE_ROT = 200;
 function layout() {
   const w = stage.clientWidth, h = stage.clientHeight;
-  const ph = clamp(h * .76, 150, 305), pw = ph * 400 / 440;
+  const ph = clamp(h * .78, 160, 325), pw = ph * 512 / 750;
   stage.style.setProperty('--ph', ph + 'px'); stage.style.setProperty('--pw', pw + 'px');
   petPos.style.setProperty('--ph', ph + 'px'); pet.style.setProperty('--pw', pw + 'px'); pet.style.setProperty('--ph', ph + 'px');
   Object.assign(dims, { w, h, pw, ph, mx: Math.max(36, (w - pw * .55) / 2), my: Math.max(24, (h - ph * .6) / 2) });
