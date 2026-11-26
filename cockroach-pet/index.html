@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#4f6f2b">
+<title>바퀴벌레 쓰담쓰담 시뮬레이터</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%234f6f2b'/%3E%3Cellipse cx='16' cy='17' rx='8' ry='10' fill='%238b4a24'/%3E%3Ccircle cx='13' cy='20' r='2' fill='%23fff'/%3E%3Ccircle cx='19' cy='20' r='2' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!-- icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 21s-8.5-5.2-8.5-11.2C3.5 6.6 5.8 4.5 8.4 4.5c1.6 0 2.9.8 3.6 2 .7-1.2 2-2 3.6-2 2.6 0 4.9 2.1 4.9 5.3C20.5 15.8 12 21 12 21z" fill="currentColor"/></symbol>
+    <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M20 3C9 3 4 9 4 15c0 1.6.4 3 1 4C4.6 17 6 13 11 11c-3 3-4 6-4 9 8 1 13-5 13-17z" fill="currentColor"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z" fill="#f7b92b" stroke="#e39a10" stroke-width="1.2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#f6c038" stroke="#d99a12" stroke-width="1.6"/><circle cx="12" cy="12" r="7" fill="none" stroke="#e8a81c" stroke-width="1.2"/><path d="M12 7v10M14.5 9.2c-.6-.8-1.5-1.1-2.6-1.1-1.4 0-2.4.7-2.4 1.8 0 2.4 5.2 1.2 5.2 3.7 0 1.1-1.1 1.9-2.6 1.9-1.1 0-2.1-.4-2.7-1.2" fill="none" stroke="#b97a0a" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-paw" viewBox="0 0 24 24"><g fill="currentColor"><ellipse cx="6" cy="10" rx="2.2" ry="2.8"/><ellipse cx="10.5" cy="5.8" rx="2.2" ry="2.8"/><ellipse cx="16" cy="6.2" rx="2.2" ry="2.8"/><ellipse cx="19.6" cy="11" rx="2.2" ry="2.8"/><path d="M12.5 11c-3 0-6 3.5-6 6.3 0 2 1.5 2.7 3 2.7 1.2 0 1.9-.6 3-.6s1.8.6 3 .6c1.5 0 3-.7 3-2.7 0-2.8-3-6.3-6-6.3z"/></g></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.5" fill="currentColor"/><path d="M8 10V7.5a4 4 0 018 0V10" fill="none" stroke="currentColor" stroke-width="2.4"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#5a8a3a"/><path d="M6.5 12.5l3.8 3.8 7.2-7.6" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11.5L12 3.5l9 8M5.5 10v10h4.5v-6h4v6h4.5V10" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-hand" viewBox="0 0 32 32"><g fill="#fff" stroke="#4f6f2b" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M9 17V8.5a1.8 1.8 0 013.6 0V15M12.6 14V5.8a1.8 1.8 0 013.6 0V14M16.2 14V6.8a1.8 1.8 0 013.6 0V15M19.8 15v-4.2a1.8 1.8 0 013.6 0V19c0 5-3 9-8.200 9-3.600 0-5.600-1.700-7.600-5l-3.600-6a1.700 1.700 0 012.900-1.800L9 17"/></g></symbol>
+    <symbol id="i-chat" viewBox="0 0 32 32"><path d="M16 4C8.800 4 4 8.400 4 14c0 3 1.500 5.600 3.800 7.400L6.500 27l5.600-3c1.200.3 2.500.5 3.900.5 7.200 0 12-4.400 12-10S23.200 4 16 4z" fill="#fff" stroke="#4a3a28" stroke-width="2" stroke-linejoin="round"/><circle cx="10.500" cy="14" r="1.700" fill="#4a3a28"/><circle cx="16" cy="14" r="1.700" fill="#4a3a28"/><circle cx="21.500" cy="14" r="1.700" fill="#4a3a28"/></symbol>
+    <symbol id="i-crumb" viewBox="0 0 48 40"><g><ellipse cx="24" cy="33" rx="19" ry="5" fill="#000" opacity=".1"/><path d="M6 32c0-8 6-12 10-15 3-6 9-9 14-5 3-1 8 2 9 8 4 2 7 6 6 12z" fill="#d9a85e"/><g fill="#b98338"><circle cx="14" cy="27" r="2"/><circle cx="22" cy="21" r="2.2"/><circle cx="30" cy="26" r="2"/><circle cx="37" cy="29" r="1.800"/><circle cx="26" cy="15" r="1.600"/><circle cx="18" cy="31" r="1.500"/></g><g fill="#efca84"><circle cx="17" cy="22" r="1.700"/><circle cx="27" cy="19" r="1.600"/><circle cx="33" cy="22" r="1.500"/><circle cx="23" cy="28" r="1.700"/></g></g></symbol>
+    <symbol id="i-fleaf" viewBox="0 0 48 40"><g><path d="M23 38c0-8 0-14 1-20" stroke="#3f7a2e" stroke-width="2.200" fill="none" stroke-linecap="round"/><path d="M24 20C12 20 6 13 5 5c9-1 17 3 19 15z" fill="#4f9a3a"/><path d="M24 24C34 22 42 16 43 7c-10-1-18 4-19 17z" fill="#62ae48"/><path d="M24 36C14 36 10 30 10 23c8 0 14 4 14 13z" fill="#7bc25a"/><path d="M24 19C18 15 12 10 8 7M24 22c6-4 12-9 16-13" stroke="#2f6a22" stroke-width="1.200" fill="none" opacity=".6"/></g></symbol>
+    <symbol id="i-pellet" viewBox="0 0 48 40"><g><ellipse cx="24" cy="35" rx="19" ry="4" fill="#000" opacity=".1"/><g fill="#5d4128"><circle cx="12" cy="29" r="5"/><circle cx="22" cy="31" r="5"/><circle cx="33" cy="30" r="5"/><circle cx="17" cy="21" r="5"/><circle cx="28" cy="21" r="5"/><circle cx="38" cy="22" r="4.500"/><circle cx="22" cy="12" r="5"/><circle cx="12" cy="18" r="4"/><circle cx="32" cy="12" r="4.200"/></g><g fill="#8d6a45"><circle cx="10.500" cy="27" r="1.700"/><circle cx="20.500" cy="29" r="1.700"/><circle cx="31.500" cy="28" r="1.700"/><circle cx="15.500" cy="19" r="1.700"/><circle cx="26.500" cy="19" r="1.700"/><circle cx="20.500" cy="10" r="1.700"/><circle cx="30.500" cy="10" r="1.500"/></g></g></symbol>
+    <symbol id="i-drop" viewBox="0 0 48 48"><path d="M24 4C18 14 11 21 11 30a13 13 0 0026 0c0-9-7-16-13-26z" fill="#5eb2ea"/><path d="M24 4C18 14 11 21 11 30a13 13 0 0026 0c0-9-7-16-13-26z" fill="none" stroke="#3b8fc9" stroke-width="1.500"/><path d="M17 31c0 4 2.500 7 6 8" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity=".8"/></symbol>
+    <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9.500v5h3.500L12 18.500v-13L7.500 9.500z" fill="currentColor"/><path d="M15 9a4 4 0 010 6M17.500 6.500a8 8 0 010 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9.500v5h3.500L12 18.500v-13L7.500 9.500z" fill="currentColor"/><path d="M16 9.500l5 5M21 9.500l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <!-- mini roach for header -->
+    <symbol id="i-roach-mini" viewBox="0 0 60 60">
+      <g fill="none" stroke="#5a3016" stroke-width="1.7" stroke-linecap="round">
+        <path d="M22 44C14 50 8 54 5 58M38 44C46 50 52 54 55 58"/>
+        <path d="M16 28L7 26M14 36L5 40M18 20L8 10M44 28L53 26M46 36L55 40M42 20L52 10"/>
+      </g>
+      <ellipse cx="30" cy="26" rx="13" ry="18" fill="#7a3d1c"/>
+      <path d="M30 10C28 22 32 34 30 44" stroke="#4a2410" stroke-width="1" fill="none" opacity=".5"/>
+      <ellipse cx="30" cy="42" rx="12" ry="9" fill="#c48a52"/>
+      <path d="M22 40C20 44 22 48 30 49C38 48 40 44 38 40Z" fill="#8b4a24"/>
+      <ellipse cx="24" cy="20" rx="3.5" ry="8" fill="#fff" opacity=".25" transform="rotate(-12 24 20)"/>
+      <circle cx="24.5" cy="45" r="2.6" fill="#1a120c"/><circle cx="35.5" cy="45" r="2.6" fill="#1a120c"/>
+      <circle cx="23.6" cy="44.2" r=".8" fill="#fff"/><circle cx="34.6" cy="44.2" r=".8" fill="#fff"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div id="app">
+  <header class="top">
+    <svg class="top-roach"><use href="#i-roach-mini"/></svg>
+    <h1>바퀴벌레 쓰담쓰담 시뮬레이터</h1>
+    <button class="rating" id="ratingBtn" aria-label="평점 4.8"><svg class="ic"><use href="#i-heart"/></svg><b>4.8</b><svg class="ic leaf"><use href="#i-leaf"/></svg></button>
+  </header>
+
+  <section class="card stats" aria-label="상태">
+    <div class="stat">
+      <div class="stat-h"><span class="lbl"><svg class="ic green"><use href="#i-heart"/></svg>행복도</span><b id="happyTxt">92/100</b></div>
+      <div class="bar"><i id="happyBar"></i></div>
+    </div>
+    <div class="vsep"></div>
+    <div class="stat coin">
+      <div class="stat-h"><span class="lbl"><svg class="ic coinic"><use href="#i-coin"/></svg>간식 코인</span></div>
+      <div class="coin-row"><b id="coinTxt">0</b><button id="coinPlus" class="plus" aria-label="무료 코인 받기">+</button></div>
+    </div>
+    <div class="vsep"></div>
+    <div class="stat">
+      <div class="stat-h"><span class="lbl"><svg class="ic"><use href="#i-star"/></svg>레벨</span><b id="lvTxt">Lv. 1</b></div>
+      <div class="bar xp"><i id="xpBar"></i></div>
+    </div>
+  </section>
+
+  <main id="stage" class="stage">
+    <div class="wood"></div>
+    <div id="leaves" class="leaves"></div>
+    <button id="soundBtn" class="sound" aria-label="소리 켜기/끄기"><svg><use href="#i-mute"/></svg></button>
+    <div id="fx" class="fx"></div>
+
+    <div id="petPos" class="pet-pos">
+      <div id="nameTag" class="name-tag" hidden><svg class="ic"><use href="#i-heart"/></svg><span id="nameTxt"></span></div>
+      <div id="petRot" class="pet-rot">
+        <div id="petLean" class="pet-lean">
+          <div id="petSquish" class="pet-squish">
+            <svg id="pet" class="roach" viewBox="0 0 400 440" aria-label="바퀴벌레">
+              <defs>
+                <radialGradient id="gWing" cx="32%" cy="28%" r="82%"><stop offset="0" style="stop-color:var(--c1)" stop-opacity=".55"/><stop offset=".22" style="stop-color:var(--c2)"/><stop offset=".72" style="stop-color:var(--c2)"/><stop offset="1" style="stop-color:var(--c3)"/></radialGradient>
+                <radialGradient id="gWingR" cx="62%" cy="34%" r="82%"><stop offset="0" style="stop-color:var(--c1)" stop-opacity=".28"/><stop offset=".25" style="stop-color:var(--c2)"/><stop offset=".7" style="stop-color:var(--c2)"/><stop offset="1" style="stop-color:var(--c3)"/></radialGradient>
+                <radialGradient id="gAbd" cx="40%" cy="40%" r="75%"><stop offset="0" style="stop-color:var(--c2)"/><stop offset=".7" style="stop-color:var(--c3)"/><stop offset="1" style="stop-color:var(--c3)"/></radialGradient>
+                <radialGradient id="gPro" cx="38%" cy="38%" r="72%"><stop offset="0" style="stop-color:var(--c1)" stop-opacity=".85"/><stop offset=".35" style="stop-color:var(--c2)"/><stop offset="1" style="stop-color:var(--c3)"/></radialGradient>
+                <radialGradient id="gProPale" cx="48%" cy="50%" r="55%"><stop offset="0" style="stop-color:var(--c2)" stop-opacity=".15"/><stop offset=".55" style="stop-color:var(--c3)" stop-opacity=".35"/><stop offset="1" style="stop-color:var(--c3)" stop-opacity="0"/></radialGradient>
+                <radialGradient id="gHead" cx="45%" cy="40%" r="70%"><stop offset="0" style="stop-color:var(--c1)"/><stop offset=".6" style="stop-color:var(--c2)"/><stop offset="1" style="stop-color:var(--c3)"/></radialGradient>
+                <radialGradient id="gEye" cx="35%" cy="32%" r="70%"><stop offset="0" stop-color="#3a2a1c"/><stop offset=".45" stop-color="#120e0b"/><stop offset="1" stop-color="#000"/></radialGradient>
+                <linearGradient id="gShine" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+                <linearGradient id="gSeam" x1="0" y1="0" x2="1" y2="0"><stop offset="0" style="stop-color:var(--c3)" stop-opacity="0"/><stop offset=".5" style="stop-color:var(--c3)" stop-opacity=".85"/><stop offset="1" style="stop-color:var(--c3)" stop-opacity="0"/></linearGradient>
+                <filter id="fChitin" x="-8%" y="-8%" width="116%" height="116%" color-interpolation-filters="sRGB">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.85 .7" numOctaves="3" seed="7" result="n"/>
+                  <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.45  0 0 0 0 0.32  0 0 0 0 0.18  0 0 0 0.22 0" result="grain"/>
+                  <feBlend in="SourceGraphic" in2="grain" mode="overlay" result="g"/>
+                  <feComposite in="g" in2="SourceAlpha" operator="in"/>
+                </filter>
+                <filter id="fFine" x="-8%" y="-8%" width="116%" height="116%" color-interpolation-filters="sRGB">
+                  <feTurbulence type="fractalNoise" baseFrequency="1.8 1.5" numOctaves="2" seed="3" result="n"/>
+                  <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.5  0 0 0 0 0.45  0 0 0 0 0.35  0 0 0 0.1 0" result="grain"/>
+                  <feBlend in="SourceGraphic" in2="grain" mode="soft-light" result="g"/>
+                  <feComposite in="g" in2="SourceAlpha" operator="in"/>
+                </filter>
+                <filter id="fSoftBlur" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="7"/>
+                </filter>
+              </defs>
+
+              <!-- contact shadow on the wood -->
+              <ellipse class="shadow" cx="206" cy="268" rx="78" ry="128" fill="#2a180c" opacity=".22" filter="url(#fSoftBlur)"/>
+
+              <!-- antennae (under the head / pronotum) -->
+              <g class="ant antL">
+                <path class="ant-body" d="M 180.7 397.1 L 176.8 402.5 L 172.8 408.0 L 168.7 413.6 L 164.5 419.3 L 160.3 425.2 L 156.1 431.1 L 151.8 437.0 L 147.4 443.1 L 143.1 449.3 L 138.6 455.5 L 134.2 461.8 L 129.7 468.2 L 125.2 474.6 L 120.7 481.1 L 116.2 487.6 L 111.6 494.2 L 107.1 500.9 L 102.6 507.6 L 98.0 514.4 L 93.5 521.2 L 89.0 528.0 L 84.5 534.9 L 80.1 541.8 L 75.7 548.7 L 71.3 555.7 L 66.9 562.7 L 62.6 569.7 L 58.3 576.7 L 54.1 583.8 L 50.0 590.8 L 45.9 597.9 L 41.8 604.9 L 42.2 605.1 L 46.3 598.1 L 50.4 591.1 L 54.7 584.1 L 58.9 577.1 L 63.3 570.1 L 67.7 563.2 L 72.1 556.2 L 76.6 549.3 L 81.1 542.4 L 85.6 535.6 L 90.1 528.8 L 94.7 522.0 L 99.3 515.2 L 103.9 508.5 L 108.5 501.9 L 113.1 495.3 L 117.7 488.7 L 122.3 482.2 L 126.9 475.8 L 131.5 469.4 L 136.0 463.1 L 140.5 456.8 L 145.0 450.7 L 149.5 444.6 L 153.9 438.6 L 158.2 432.6 L 162.6 426.8 L 166.8 421.0 L 171.0 415.4 L 175.2 409.8 L 179.3 404.3 L 183.3 398.9 Z"/>
+                <g class="ant-rings"><circle cx="174.0" cy="408.9" r="1.15"/><circle cx="165.7" cy="420.2" r="1.10"/><circle cx="157.2" cy="431.8" r="1.05"/><circle cx="148.5" cy="443.8" r="1.00"/><circle cx="139.6" cy="456.2" r="0.95"/><circle cx="130.6" cy="468.8" r="0.90"/><circle cx="121.5" cy="481.6" r="0.85"/><circle cx="112.4" cy="494.8" r="0.80"/><circle cx="103.2" cy="508.1" r="0.75"/><circle cx="94.1" cy="521.6" r="0.70"/><circle cx="85.1" cy="535.2" r="0.65"/><circle cx="76.1" cy="549.0" r="0.60"/><circle cx="67.3" cy="562.9" r="0.55"/><circle cx="58.6" cy="576.9" r="0.50"/><circle cx="50.2" cy="590.9" r="0.45"/></g>
+              </g>
+              <g class="ant antR">
+                <path class="ant-body" d="M 216.7 398.9 L 220.7 404.3 L 224.8 409.8 L 229.0 415.4 L 233.2 421.0 L 237.4 426.8 L 241.8 432.6 L 246.1 438.6 L 250.5 444.6 L 255.0 450.7 L 259.5 456.8 L 264.0 463.1 L 268.5 469.4 L 273.1 475.8 L 277.7 482.2 L 282.3 488.7 L 286.9 495.3 L 291.5 501.9 L 296.1 508.5 L 300.7 515.2 L 305.3 522.0 L 309.9 528.8 L 314.4 535.6 L 318.9 542.4 L 323.4 549.3 L 327.9 556.2 L 332.3 563.2 L 336.7 570.1 L 341.1 577.1 L 345.3 584.1 L 349.6 591.1 L 353.7 598.1 L 357.8 605.1 L 358.2 604.9 L 354.1 597.9 L 350.0 590.8 L 345.9 583.8 L 341.7 576.7 L 337.4 569.7 L 333.1 562.7 L 328.7 555.7 L 324.3 548.7 L 319.9 541.8 L 315.5 534.9 L 311.0 528.0 L 306.5 521.2 L 302.0 514.4 L 297.4 507.6 L 292.9 500.9 L 288.4 494.2 L 283.8 487.6 L 279.3 481.1 L 274.8 474.6 L 270.3 468.2 L 265.8 461.8 L 261.4 455.5 L 256.9 449.3 L 252.6 443.1 L 248.2 437.0 L 243.9 431.1 L 239.7 425.2 L 235.5 419.3 L 231.3 413.6 L 227.2 408.0 L 223.2 402.5 L 219.3 397.1 Z"/>
+                <g class="ant-rings"><circle cx="226.0" cy="408.9" r="1.15"/><circle cx="234.3" cy="420.2" r="1.10"/><circle cx="242.8" cy="431.8" r="1.05"/><circle cx="251.5" cy="443.8" r="1.00"/><circle cx="260.4" cy="456.2" r="0.95"/><circle cx="269.4" cy="468.8" r="0.90"/><circle cx="278.5" cy="481.6" r="0.85"/><circle cx="287.6" cy="494.8" r="0.80"/><circle cx="296.8" cy="508.1" r="0.75"/><circle cx="305.9" cy="521.6" r="0.70"/><circle cx="314.9" cy="535.2" r="0.65"/><circle cx="323.9" cy="549.0" r="0.60"/><circle cx="332.7" cy="562.9" r="0.55"/><circle cx="341.4" cy="576.9" r="0.50"/><circle cx="349.8" cy="590.9" r="0.45"/></g>
+              </g>
+
+              <g class="legs">
+                <g class="leg lL1">
+        <path class="coxa" d="M 161.1 350.3 L 156.7 353.9 L 152.3 357.5 L 147.9 361.2 L 143.5 364.8 L 148.5 371.2 L 153.1 367.8 L 157.7 364.5 L 162.3 361.1 L 166.9 357.7 Z"/>
+        <path class="femur" d="M 143.5 365.2 L 138.0 370.3 L 132.4 375.5 L 126.9 380.6 L 121.3 385.8 L 115.8 390.9 L 110.3 396.1 L 113.7 399.9 L 119.5 395.1 L 125.3 390.2 L 131.1 385.4 L 136.9 380.5 L 142.7 375.7 L 148.5 370.8 Z"/>
+        <path class="tibia" d="M 110.2 396.7 L 107.0 401.1 L 103.8 405.5 L 100.6 409.9 L 97.4 414.4 L 94.2 418.8 L 91.0 423.2 L 93.0 424.8 L 96.5 420.6 L 99.9 416.3 L 103.4 412.1 L 106.8 407.8 L 110.3 403.6 L 113.8 399.3 Z"/>
+        <g class="spines"><line x1="108.4" y1="402.7" x2="106.0" y2="399.0"/><line x1="103.7" y1="408.7" x2="101.3" y2="405.1"/><line x1="99.1" y1="414.8" x2="96.7" y2="411.1"/><line x1="94.4" y1="420.9" x2="92.0" y2="417.2"/></g>
+        <path class="tarsus" d="M 91.1 423.5 L 88.7 428.6 L 86.4 433.7 L 84.1 438.8 L 81.7 443.9 L 82.3 444.1 L 84.9 439.2 L 87.6 434.3 L 90.3 429.4 L 92.9 424.5 Z"/>
+        <path class="claw" d="M 82.0 444.0 L 79.3 446.2 M 82.0 444.0 L 81.8 447.5"/>
+        <circle class="joint" cx="146.0" cy="368.0" r="2.8"/>
+        <circle class="joint" cx="112.0" cy="398.0" r="2.2"/>
+        <circle class="joint" cx="92.0" cy="424.0" r="1.6"/>
+      </g><g class="leg lR1">
+        <path class="coxa" d="M 233.1 357.7 L 237.7 361.1 L 242.3 364.5 L 246.9 367.8 L 251.5 371.2 L 256.5 364.8 L 252.1 361.2 L 247.7 357.5 L 243.3 353.9 L 238.9 350.3 Z"/>
+        <path class="femur" d="M 251.5 370.8 L 257.3 375.7 L 263.1 380.5 L 268.9 385.4 L 274.7 390.2 L 280.5 395.1 L 286.3 399.9 L 289.7 396.1 L 284.2 390.9 L 278.7 385.8 L 273.1 380.6 L 267.6 375.5 L 262.0 370.3 L 256.5 365.2 Z"/>
+        <path class="tibia" d="M 286.2 399.3 L 289.7 403.6 L 293.2 407.8 L 296.6 412.1 L 300.1 416.3 L 303.5 420.6 L 307.0 424.8 L 309.0 423.2 L 305.8 418.8 L 302.6 414.4 L 299.4 409.9 L 296.2 405.5 L 293.0 401.1 L 289.8 396.7 Z"/>
+        <g class="spines"><line x1="291.6" y1="402.7" x2="294.0" y2="399.0"/><line x1="296.3" y1="408.7" x2="298.7" y2="405.1"/><line x1="300.9" y1="414.8" x2="303.3" y2="411.1"/><line x1="305.6" y1="420.9" x2="308.0" y2="417.2"/></g>
+        <path class="tarsus" d="M 307.1 424.5 L 309.7 429.4 L 312.4 434.3 L 315.1 439.2 L 317.7 444.1 L 318.3 443.9 L 315.9 438.8 L 313.6 433.7 L 311.3 428.6 L 308.9 423.5 Z"/>
+        <path class="claw" d="M 318.0 444.0 L 318.2 447.5 M 318.0 444.0 L 320.7 446.2"/>
+        <circle class="joint" cx="254.0" cy="368.0" r="2.8"/>
+        <circle class="joint" cx="288.0" cy="398.0" r="2.2"/>
+        <circle class="joint" cx="308.0" cy="424.0" r="1.6"/>
+      </g><g class="leg lL2">
+        <path class="coxa" d="M 155.1 318.6 L 149.1 319.8 L 143.2 321.1 L 137.2 322.3 L 131.3 323.6 L 132.7 332.4 L 138.8 331.7 L 144.8 330.9 L 150.9 330.2 L 156.9 329.4 Z"/>
+        <path class="femur" d="M 132.8 323.8 L 123.7 322.4 L 114.7 320.9 L 105.7 319.5 L 96.6 318.0 L 87.6 316.6 L 78.5 315.1 L 77.5 320.9 L 86.4 322.7 L 95.4 324.6 L 104.3 326.5 L 113.3 328.4 L 122.3 330.3 L 131.2 332.2 Z"/>
+        <path class="tibia" d="M 77.0 315.7 L 70.8 318.6 L 64.5 321.4 L 58.3 324.2 L 52.0 327.0 L 45.7 329.9 L 39.5 332.7 L 40.5 335.3 L 46.9 332.8 L 53.3 330.3 L 59.7 327.8 L 66.2 325.3 L 72.6 322.8 L 79.0 320.3 Z"/>
+        <g class="spines"><line x1="71.2" y1="320.9" x2="70.9" y2="316.5"/><line x1="62.3" y1="324.6" x2="62.0" y2="320.2"/><line x1="53.4" y1="328.3" x2="53.2" y2="324.0"/><line x1="44.6" y1="332.1" x2="44.3" y2="327.7"/></g>
+        <path class="tarsus" d="M 39.2 333.2 L 34.9 337.9 L 30.5 342.5 L 26.1 347.1 L 21.8 351.8 L 22.2 352.2 L 26.9 347.9 L 31.5 343.5 L 36.1 339.1 L 40.8 334.8 Z"/>
+        <path class="claw" d="M 22.0 352.0 L 18.7 353.3 M 22.0 352.0 L 20.7 355.3"/>
+        <circle class="joint" cx="132.0" cy="328.0" r="2.8"/>
+        <circle class="joint" cx="78.0" cy="318.0" r="2.2"/>
+        <circle class="joint" cx="40.0" cy="334.0" r="1.6"/>
+      </g><g class="leg lR2">
+        <path class="coxa" d="M 243.1 329.4 L 249.1 330.2 L 255.2 330.9 L 261.2 331.7 L 267.3 332.4 L 268.7 323.6 L 262.8 322.3 L 256.8 321.1 L 250.9 319.8 L 244.9 318.6 Z"/>
+        <path class="femur" d="M 268.8 332.2 L 277.7 330.3 L 286.7 328.4 L 295.7 326.5 L 304.6 324.6 L 313.6 322.7 L 322.5 320.9 L 321.5 315.1 L 312.4 316.6 L 303.4 318.0 L 294.3 319.5 L 285.3 320.9 L 276.3 322.4 L 267.2 323.8 Z"/>
+        <path class="tibia" d="M 321.0 320.3 L 327.4 322.8 L 333.8 325.3 L 340.3 327.8 L 346.7 330.3 L 353.1 332.8 L 359.5 335.3 L 360.5 332.7 L 354.3 329.9 L 348.0 327.0 L 341.7 324.2 L 335.5 321.4 L 329.2 318.6 L 323.0 315.7 Z"/>
+        <g class="spines"><line x1="328.8" y1="320.9" x2="329.1" y2="316.5"/><line x1="337.7" y1="324.6" x2="338.0" y2="320.2"/><line x1="346.6" y1="328.3" x2="346.8" y2="324.0"/><line x1="355.4" y1="332.1" x2="355.7" y2="327.7"/></g>
+        <path class="tarsus" d="M 359.2 334.8 L 363.9 339.1 L 368.5 343.5 L 373.1 347.9 L 377.8 352.2 L 378.2 351.8 L 373.9 347.1 L 369.5 342.5 L 365.1 337.9 L 360.8 333.2 Z"/>
+        <path class="claw" d="M 378.0 352.0 L 379.3 355.3 M 378.0 352.0 L 381.3 353.3"/>
+        <circle class="joint" cx="268.0" cy="328.0" r="2.8"/>
+        <circle class="joint" cx="322.0" cy="318.0" r="2.2"/>
+        <circle class="joint" cx="360.0" cy="334.0" r="1.6"/>
+      </g><g class="leg lL3">
+        <path class="coxa" d="M 171.9 289.1 L 166.7 285.3 L 161.6 281.5 L 156.4 277.7 L 151.3 273.9 L 144.7 282.1 L 149.6 286.3 L 154.4 290.5 L 159.3 294.7 L 164.1 298.9 Z"/>
+        <path class="femur" d="M 151.9 274.9 L 143.0 264.4 L 134.1 253.9 L 125.2 243.4 L 116.3 232.9 L 107.4 222.5 L 98.5 212.0 L 93.5 216.0 L 102.0 226.9 L 110.4 237.7 L 118.8 248.6 L 127.3 259.4 L 135.7 270.3 L 144.1 281.1 Z"/>
+        <path class="tibia" d="M 98.4 212.6 L 91.8 201.7 L 85.3 190.8 L 78.8 179.9 L 72.3 169.0 L 65.8 158.2 L 59.3 147.3 L 56.7 148.7 L 62.9 159.8 L 69.0 171.0 L 75.2 182.1 L 81.3 193.2 L 87.5 204.3 L 93.6 215.4 Z"/>
+        <g class="spines"><line x1="89.2" y1="202.1" x2="94.7" y2="201.1"/><line x1="82.5" y1="190.6" x2="88.0" y2="189.5"/><line x1="75.9" y1="179.0" x2="81.4" y2="178.0"/><line x1="69.2" y1="167.5" x2="74.7" y2="166.4"/><line x1="62.6" y1="155.9" x2="68.1" y2="154.9"/></g>
+        <path class="tarsus" d="M 59.1 147.6 L 55.9 138.7 L 52.7 129.8 L 49.5 120.8 L 46.3 111.9 L 45.7 112.1 L 48.5 121.2 L 51.3 130.2 L 54.1 139.3 L 56.9 148.4 Z"/>
+        <path class="claw" d="M 46.0 112.0 L 46.3 108.5 M 46.0 112.0 L 43.7 109.4"/>
+        <circle class="joint" cx="148.0" cy="278.0" r="3.4"/>
+        <circle class="joint" cx="96.0" cy="214.0" r="2.6"/>
+        <circle class="joint" cx="58.0" cy="148.0" r="1.6"/>
+      </g><g class="leg lR3">
+        <path class="coxa" d="M 235.9 298.9 L 240.7 294.7 L 245.6 290.5 L 250.4 286.3 L 255.3 282.1 L 248.7 273.9 L 243.6 277.7 L 238.4 281.5 L 233.3 285.3 L 228.1 289.1 Z"/>
+        <path class="femur" d="M 255.9 281.1 L 264.3 270.3 L 272.7 259.4 L 281.2 248.6 L 289.6 237.7 L 298.0 226.9 L 306.5 216.0 L 301.5 212.0 L 292.6 222.5 L 283.7 232.9 L 274.8 243.4 L 265.9 253.9 L 257.0 264.4 L 248.1 274.9 Z"/>
+        <path class="tibia" d="M 306.4 215.4 L 312.5 204.3 L 318.7 193.2 L 324.8 182.1 L 331.0 171.0 L 337.1 159.8 L 343.3 148.7 L 340.7 147.3 L 334.2 158.2 L 327.7 169.0 L 321.2 179.9 L 314.7 190.8 L 308.2 201.7 L 301.6 212.6 Z"/>
+        <g class="spines"><line x1="310.8" y1="202.1" x2="305.3" y2="201.1"/><line x1="317.5" y1="190.6" x2="312.0" y2="189.5"/><line x1="324.1" y1="179.0" x2="318.6" y2="178.0"/><line x1="330.8" y1="167.5" x2="325.3" y2="166.4"/><line x1="337.4" y1="155.9" x2="331.9" y2="154.9"/></g>
+        <path class="tarsus" d="M 343.1 148.4 L 345.9 139.3 L 348.7 130.2 L 351.5 121.2 L 354.3 112.1 L 353.7 111.9 L 350.5 120.8 L 347.3 129.8 L 344.1 138.7 L 340.9 147.6 Z"/>
+        <path class="claw" d="M 354.0 112.0 L 356.3 109.4 M 354.0 112.0 L 353.7 108.5"/>
+        <circle class="joint" cx="252.0" cy="278.0" r="3.4"/>
+        <circle class="joint" cx="304.0" cy="214.0" r="2.6"/>
+        <circle class="joint" cx="342.0" cy="148.0" r="1.6"/>
+      </g>
+              </g>
+
+              <g class="torso">
+                <!-- abdomen under the wings, scalloped sides showing -->
+                <g class="abd" filter="url(#fChitin)">
+                  <path class="abd-body" d="M 200 100
+                    C 184 100, 170 116, 162 136
+                    C 146 170, 136 202, 134 232
+                    C 132 266, 140 296, 154 320
+                    C 168 328, 232 328, 246 320
+                    C 260 296, 268 266, 266 232
+                    C 264 202, 254 170, 238 136
+                    C 230 116, 216 100, 200 100 Z"/>
+                  <g class="segs"><path d="M 180.0 128.0 Q 200 124.5 220.0 128.0"/><path d="M 175.2 148.0 Q 200 144.5 224.8 148.0"/><path d="M 170.3 168.0 Q 200 164.5 229.7 168.0"/><path d="M 164.9 190.0 Q 200 186.5 235.1 190.0"/><path d="M 159.5 212.0 Q 200 208.5 240.5 212.0"/><path d="M 154.1 234.0 Q 200 230.5 245.9 234.0"/><path d="M 148.8 256.0 Q 200 252.5 251.2 256.0"/><path d="M 143.9 276.0 Q 200 272.5 256.1 276.0"/><path d="M 139.5 294.0 Q 200 290.5 260.5 294.0"/></g>
+                </g>
+
+                <!-- cerci at the tail -->
+                <g class="cerci">
+                  <path d="M 193 116 C 184 102, 178 90, 172 80 L 182 86 C 188 98, 193 110, 198 118 Z"/>
+                  <path d="M 207 116 C 216 102, 222 90, 228 80 L 218 86 C 212 98, 207 110, 202 118 Z"/>
+                </g>
+
+                <!-- tegmina (wing covers) -->
+                <g class="wings" filter="url(#fChitin)">
+                  <path class="wing wingL" d="M 201 308
+                    C 178 304, 154 288, 146 248
+                    C 138 208, 142 168, 156 140
+                    C 168 122, 186 113, 200 118
+                    C 202 170, 204 250, 201 308 Z" fill="url(#gWing)"/>
+                  <path class="wing wingR" d="M 199 308
+                    C 222 304, 246 288, 254 248
+                    C 262 208, 258 168, 244 140
+                    C 232 122, 214 113, 200 118
+                    C 198 170, 196 250, 199 308 Z" fill="url(#gWingR)"/>
+                  <path class="wing-shade" d="M 199 308
+                    C 222 304, 246 288, 254 248
+                    C 262 208, 258 168, 244 140
+                    C 238 155, 248 210, 244 255
+                    C 238 285, 220 304, 199 308 Z" fill="var(--c3)" opacity=".28"/>
+                  <g class="veins veinsL"><path d="M 194.0 302.0 Q 190.0 212.0 194.0 122.0"/><path d="M 194.0 302.0 Q 184.0 214.0 184.0 126.0"/><path d="M 194.0 302.0 Q 177.0 220.0 172.0 138.0"/><path d="M 194.0 302.0 Q 170.0 231.0 160.0 160.0"/><path d="M 194.0 302.0 Q 164.0 246.0 150.0 190.0"/><path d="M 194.0 302.0 Q 162.0 266.0 148.0 230.0"/><path d="M 194.0 302.0 Q 165.0 283.5 156.0 265.0"/><path d="M 182.0 170.0 L 164.0 178.0"/><path d="M 186.0 210.0 L 158.0 218.0"/><path d="M 188.0 250.0 L 160.0 255.0"/></g>
+                  <g class="veins veinsR"><path d="M 206.0 302.0 Q 210.0 212.0 206.0 122.0"/><path d="M 206.0 302.0 Q 216.0 214.0 216.0 126.0"/><path d="M 206.0 302.0 Q 223.0 220.0 228.0 138.0"/><path d="M 206.0 302.0 Q 230.0 231.0 240.0 160.0"/><path d="M 206.0 302.0 Q 236.0 246.0 250.0 190.0"/><path d="M 206.0 302.0 Q 238.0 266.0 252.0 230.0"/><path d="M 206.0 302.0 Q 235.0 283.5 244.0 265.0"/><path d="M 218.0 170.0 L 236.0 178.0"/><path d="M 214.0 210.0 L 242.0 218.0"/><path d="M 212.0 250.0 L 240.0 255.0"/></g>
+                  <!-- center seam -->
+                  <path class="seam" d="M 200 118 C 199 170, 201 250, 200 306"/>
+                  <!-- specular highlights -->
+                  <ellipse cx="172" cy="188" rx="9" ry="38" fill="#fff" opacity=".34" transform="rotate(-9 172 188)"/>
+                  <ellipse cx="168" cy="236" rx="4.5" ry="16" fill="#fff" opacity=".22" transform="rotate(-11 168 236)"/>
+                  <path d="M 166 152 C 170 148, 180 160, 178 190" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" opacity=".28"/>
+                  <ellipse cx="228" cy="200" rx="6" ry="20" fill="#fff" opacity=".08" transform="rotate(8 228 200)"/>
+                </g>
+
+                <!-- pronotum shield -->
+                <g class="pron" filter="url(#fFine)">
+                  <!-- pale tan margin, slim, strongest at the sides and rear -->
+                  <path class="pro-pale" d="M 200 302
+                    C 238 296, 266 312, 270 342
+                    C 274 364, 262 386, 230 394
+                    C 216 398, 184 398, 170 394
+                    C 138 386, 126 364, 130 342
+                    C 134 312, 162 296, 200 302 Z"/>
+                  <!-- mid-brown disc, only a slim inset so the rim stays thin; front almost flush -->
+                  <path class="pro-body" d="M 200 307
+                    C 234 302, 260 316, 264 342
+                    C 267 362, 256 384, 228 392
+                    C 214 396, 186 396, 172 392
+                    C 144 384, 133 362, 136 342
+                    C 140 316, 166 302, 200 307 Z" fill="url(#gPro)"/>
+                  <!-- dark central blotches (American cockroach mask) -->
+                  <path class="pro-blotch" d="M 200 330
+                    C 184 324, 166 332, 158 350
+                    C 152 368, 166 382, 190 384
+                    C 196 374, 198 356, 200 342 Z"/>
+                  <path class="pro-blotch" d="M 200 330
+                    C 216 324, 234 332, 242 350
+                    C 248 368, 234 382, 210 384
+                    C 204 374, 202 356, 200 342 Z"/>
+                  <ellipse cx="200" cy="352" rx="20" ry="14" fill="url(#gProPale)"/>
+                  <ellipse cx="180" cy="338" rx="18" ry="9" fill="#fff" opacity=".28" transform="rotate(-16 180 338)"/>
+                  <ellipse cx="174" cy="356" rx="6" ry="3.5" fill="#fff" opacity=".2" transform="rotate(-20 174 356)"/>
+                  <path class="pro-edge" d="M 200 300
+                    C 240 294, 268 310, 274 342
+                    C 278 366, 264 388, 232 396
+                    C 216 400, 184 400, 168 396
+                    C 136 388, 122 366, 126 342
+                    C 132 310, 160 294, 200 300 Z" fill="none"/>
+                </g>
+
+                <!-- head (peeking from under the front of the pronotum) -->
+                <g class="head">
+                  <g class="headbob">
+                    <path class="head-body" d="M 172 378
+                      C 174 366, 186 360, 200 360
+                      C 214 360, 226 366, 228 378
+                      C 230 390, 222 404, 200 408
+                      C 178 404, 170 390, 172 378 Z" fill="url(#gHead)"/>
+                    <path class="head-edge" d="M 172 378
+                      C 174 366, 186 360, 200 360
+                      C 214 360, 226 366, 228 378
+                      C 230 390, 222 404, 200 408
+                      C 178 404, 170 390, 172 378 Z" fill="none"/>
+                    <g class="eyes">
+                      <g class="eye">
+                        <ellipse cx="178" cy="392" rx="8.2" ry="7.4" fill="url(#gEye)"/>
+                        <ellipse cx="175.6" cy="389.2" rx="2.6" ry="2.1" fill="#fff" opacity=".9"/>
+                        <ellipse cx="180.2" cy="393.8" rx="1.1" ry=".8" fill="#fff" opacity=".55"/>
+                      </g>
+                      <g class="eye">
+                        <ellipse cx="222" cy="392" rx="8.2" ry="7.4" fill="url(#gEye)"/>
+                        <ellipse cx="219.6" cy="389.2" rx="2.6" ry="2.1" fill="#fff" opacity=".9"/>
+                        <ellipse cx="224.2" cy="393.8" rx="1.1" ry=".8" fill="#fff" opacity=".55"/>
+                      </g>
+                    </g>
+                    <g class="lids">
+                      <path d="M 169.5 390 A 8.2 7.4 0 0 1 186.5 390"/>
+                      <path d="M 213.5 390 A 8.2 7.4 0 0 1 230.5 390"/>
+                    </g>
+                    <!-- palps / mandibles (for eating) -->
+                    <g class="palps">
+                      <path class="palp palpL" d="M 192 404 C 188 412, 186 416, 188 420"/>
+                      <path class="palp palpR" d="M 208 404 C 212 412, 214 416, 212 420"/>
+                    </g>
+                    <g class="chew"><circle cx="196" cy="412" r="1.8"/><circle cx="204" cy="413" r="1.4"/></g>
+                    <!-- kept for JS/CSS compatibility; hidden by default, almost unused on the realistic face -->
+                    <g class="brows"><path d="M 170 382 L 186 386"/><path d="M 230 382 L 214 386"/></g>
+                    <path class="m m-smile" d="M 194 402 Q 200 406 206 402"/>
+                    <ellipse class="m m-open" cx="200" cy="404" rx="3.2" ry="2.2"/>
+                    <path class="m m-flat" d="M 194 403 Q 200 401 206 403"/>
+                  </g>
+                  <ellipse class="hit-head" cx="200" cy="382" rx="50" ry="40" fill="transparent"/>
+                </g>
+              </g>
+
+              <ellipse class="hit-back" cx="200" cy="210" rx="76" ry="112" fill="transparent"/>
+              <ellipse class="hit-head" cx="200" cy="382" rx="50" ry="40" fill="transparent"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="mood" class="mood"><svg class="face" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="#9be15d" stroke="#5fa02f" stroke-width="2"/><g id="faceG"></g></svg><span id="moodTxt">기분이 좋아요!</span><svg class="ic green mh"><use href="#i-heart"/></svg></div>
+    <div id="hint" class="hint">바퀴벌레를 손가락으로 살살 문질러 보세요</div>
+  </main>
+
+  <section class="panel">
+    <div class="card colors">
+      <div class="row-h"><span class="lbl"><svg class="ic paw"><use href="#i-paw"/></svg>바퀴벌레 색상</span><span class="own">보유 색상 <b id="ownTxt">6/12</b> <svg class="ic lk"><use href="#i-lock"/></svg></span></div>
+      <div id="swatches" class="swatches"></div>
+    </div>
+    <div class="card snacks">
+      <div class="row-h snack-h"><span class="lbl"><svg class="ic leaf2"><use href="#i-leaf"/></svg>간식 / 아이템</span></div>
+      <div id="snackRow" class="snack-row"></div>
+    </div>
+    <div class="actions">
+      <button id="btnPet" class="act pet on"><svg class="aic"><use href="#i-hand"/></svg><span><b>쓰담쓰담</b><small>(기본)</small></span></button>
+      <button id="btnCute" class="act cute"><svg class="aic w"><use href="#i-heart"/></svg><span><b>귀여워해줘</b><small>행복도 +10 <svg class="ic sm"><use href="#i-coin"/></svg> 10</small></span></button>
+      <button id="btnName" class="act name"><svg class="aic"><use href="#i-chat"/></svg><span><b id="nameBtnT">이름 지어주기</b><small id="nameBtnS">특별한 애정</small></span></button>
+    </div>
+  </section>
+  <nav class="nav"><button id="btnHome" class="home" aria-label="홈"><svg><use href="#i-home"/></svg></button></nav>
+
+  <div id="toast" class="toast" role="status"></div>
+  <div id="ghost" class="ghost" hidden><svg><use href="#i-crumb"/></svg></div>
+  <div id="sheetWrap" class="sheet-wrap" hidden><div class="sheet" id="sheet" role="dialog"></div></div>
+  <div id="lvUp" class="lvup" hidden><div class="lvup-card"><div class="big">🎉</div><h2>레벨 업!</h2><p id="lvUpTxt"></p><small>눌러서 닫기</small></div></div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
