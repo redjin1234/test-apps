@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#6ec7ee">
+  <meta name="description" content="실시간 자외선 지수, 거울 모드, 2시간 썬크림 방어막 타이머">
+  <title>햇님의 썬크림 타이머</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="scene">
+    <div class="wrap">
+      <header class="brand">
+        <h1>햇님의 썬크림 타이머</h1>
+        <p>실데이터 · 2시간 방어막</p>
+      </header>
+
+      <div class="sun-stage" aria-hidden="true">
+        <svg class="sun" id="sun" data-mood="low" viewBox="0 0 240 240" role="img">
+          <defs>
+            <radialGradient id="sunGlow" cx="40%" cy="35%" r="70%">
+              <stop offset="0%" stop-color="#fff6a8"/>
+              <stop offset="55%" stop-color="#ffd93d"/>
+              <stop offset="100%" stop-color="#ffb000"/>
+            </radialGradient>
+          </defs>
+          <g class="aura">
+            <ellipse cx="120" cy="120" rx="108" ry="108" fill="none" stroke="#ff5a1f" stroke-width="6" opacity="0.35"/>
+          </g>
+          <g class="rays">
+            <rect class="ray" x="116" y="8" width="8" height="28" rx="4"/>
+            <rect class="ray" x="116" y="204" width="8" height="28" rx="4"/>
+            <rect class="ray" x="8" y="116" width="28" height="8" rx="4"/>
+            <rect class="ray" x="204" y="116" width="28" height="8" rx="4"/>
+            <rect class="ray" x="116" y="8" width="8" height="28" rx="4" transform="rotate(45 120 120)"/>
+            <rect class="ray" x="116" y="8" width="8" height="28" rx="4" transform="rotate(135 120 120)"/>
+            <rect class="ray" x="116" y="8" width="8" height="28" rx="4" transform="rotate(225 120 120)"/>
+            <rect class="ray" x="116" y="8" width="8" height="28" rx="4" transform="rotate(315 120 120)"/>
+          </g>
+          <g class="fire">
+            <path d="M62 70 C50 28 88 18 96 52 C108 16 138 28 126 64 C150 36 176 58 152 86 Z" fill="#ff5a1f"/>
+            <path d="M78 72 C72 42 98 36 104 62 C114 34 138 42 128 68 C146 48 164 66 148 86 Z" fill="#ffd56a"/>
+            <path d="M150 48 C162 18 196 32 184 70 C206 48 214 78 196 92 Z" fill="#ff7a1a"/>
+            <path class="fire-x" d="M48 96 C28 70 28 120 62 118" fill="#ff5a1f"/>
+            <path class="fire-x" d="M192 96 C212 70 214 124 178 118" fill="#ff5a1f"/>
+          </g>
+          <circle class="face-disk" cx="120" cy="120" r="68"/>
+          <ellipse class="blush" cx="88" cy="132" rx="12" ry="8"/>
+          <ellipse class="blush" cx="152" cy="132" rx="12" ry="8"/>
+          <!-- happy crescent eyes -->
+          <path class="eye eye-happy eye-left" d="M92 110 q8 10 16 0" stroke-width="5"/>
+          <path class="eye eye-happy eye-right" d="M132 110 q8 10 16 0" stroke-width="5"/>
+          <!-- open eyes -->
+          <ellipse class="eye-open eye-open-left" cx="100" cy="112" rx="8" ry="7" fill="#3a2a14"/>
+          <ellipse class="eye-open eye-open-right" cx="140" cy="112" rx="8" ry="7" fill="#3a2a14"/>
+          <circle class="eye-glint eye-open" cx="97" cy="109" r="2.2" fill="#fff"/>
+          <circle class="eye-glint eye-open" cx="137" cy="109" r="2.2" fill="#fff"/>
+          <!-- wide / fiery eyes -->
+          <ellipse class="eye-wide eye-wide-left" cx="100" cy="112" rx="9" ry="9" fill="#3a2a14"/>
+          <ellipse class="eye-wide eye-wide-right" cx="140" cy="112" rx="9" ry="9" fill="#3a2a14"/>
+          <circle class="eye-wide" cx="97" cy="108" r="2.4" fill="#fff"/>
+          <circle class="eye-wide" cx="137" cy="108" r="2.4" fill="#fff"/>
+          <path class="brow brow-left eye-wide" d="M88 96 q12 -8 22 0" stroke-width="4"/>
+          <path class="brow brow-right eye-wide" d="M130 96 q12 -8 22 0" stroke-width="4"/>
+          <path class="wink-eye" d="M132 114 q8 8 16 0" stroke="#3a2a14" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <!-- mouths: all present, visibility by mood via stroke on current; hide unused in JS/CSS -->
+          <path class="mouth mouth-low" d="M96 138 q24 22 48 0" stroke-width="5"/>
+          <path class="mouth mouth-mid" d="M102 140 q18 14 36 0" stroke-width="5"/>
+          <path class="mouth mouth-high" d="M110 142 q10 10 20 0" stroke-width="5"/>
+          <path class="mouth mouth-hot" d="M108 140 q12 20 24 0 q-12 8 -24 0" stroke-width="4" fill="#d3542e"/>
+          <!-- sunglasses -->
+          <g class="sunglass">
+            <rect x="78" y="104" width="36" height="22" rx="8" fill="#2b2416"/>
+            <rect x="126" y="104" width="36" height="22" rx="8" fill="#2b2416"/>
+            <rect x="112" y="110" width="16" height="5" rx="2" fill="#2b2416"/>
+            <rect x="80" y="106" width="14" height="8" rx="3" fill="#7ad0ff" opacity="0.45"/>
+            <rect x="128" y="106" width="14" height="8" rx="3" fill="#7ad0ff" opacity="0.45"/>
+          </g>
+          <!-- sweat -->
+          <path class="sweat" d="M170 86 c0 12 -14 12 -14 0 c0 -10 7 -16 14 0z" transform="rotate(12 163 86)"/>
+          <path class="sweat" d="M66 96 c0 10 -12 10 -12 0 c0 -8 6 -14 12 0z"/>
+        </svg>
+      </div>
+
+      <section class="bubble" aria-live="polite">
+        <div class="uv-row">
+          <div class="uv-number" id="uvNumber">–</div>
+          <div class="uv-label" id="uvLabel">불러오는 중</div>
+        </div>
+        <p class="one-liner" id="oneLiner">햇님이 자외선 수치를 가져오는 중이에요.</p>
+        <p class="meta" id="meta"></p>
+      </section>
+
+      <section class="card">
+        <h2>오늘 시간대별 자외선</h2>
+        <div class="hours" id="hours"></div>
+
+        <div class="shield-head">
+          <h2>썬크림 방어막</h2>
+          <div class="shield-time" id="shieldTime">아직 안 발랐어요</div>
+        </div>
+        <div class="gauge" role="meter" aria-label="썬크림 방어막" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="gaugeMeter">
+          <div class="gauge-fill" id="gaugeFill"></div>
+          <div class="gauge-label" id="gaugeLabel">방어막 0%</div>
+        </div>
+
+        <div class="cities" id="cities" role="group" aria-label="위치 선택"></div>
+
+        <button class="mirror-open" id="mirrorOpen" type="button">거울 모드</button>
+        <p class="mirror-hint">카메라를 거울처럼 켜서 바르는 위치를 보여줘요. 사진은 찍지 않아요.</p>
+        <button class="apply" id="applyBtn" type="button">썬크림 발랐어요</button>
+        <p class="status-note" id="statusNote">바르면 2시간 동안 방어막이 천천히 줄어들어요.</p>
+      </section>
+
+      <p class="footnote">자외선 자료는 Current UV Index와 Open-Meteo의 실시간·시간별 UV 지수입니다. 선크림은 보통 2시간마다, 땀이 나거나 물에 들어갔다면 더 일찍 다시 발라 주세요.</p>
+    </div>
+  </main>
+
+
+  <div class="mirror" id="mirror" hidden role="dialog" aria-modal="true" aria-labelledby="mirrorTitle">
+    <div class="mirror-stage">
+      <video class="mirror-video" id="mirrorVideo" playsinline muted autoplay></video>
+      <canvas class="mirror-canvas" id="mirrorCanvas"></canvas>
+      <div class="mirror-scan" id="mirrorScan" hidden></div>
+    </div>
+    <div class="mirror-top">
+      <div class="mirror-top-text">
+        <h2 id="mirrorTitle">거울 모드</h2>
+        <p class="mirror-privacy">영상은 이 기기 안에서만 처리되며, 어디에도 저장하거나 올리지 않아요.</p>
+      </div>
+      <button class="mirror-close" id="mirrorClose" type="button">닫기</button>
+    </div>
+    <div class="mirror-live">
+      <span class="mirror-chip" id="mirrorUvChip">UV –</span>
+      <span class="mirror-chip mirror-chip-light" id="mirrorLight">빛 세기 (대략) --</span>
+    </div>
+    <p class="mirror-status" id="mirrorStatus">얼굴을 맞추면 바르는 위치가 따라가요.</p>
+    <p class="mirror-err" id="mirrorErr" hidden></p>
+    <div class="mirror-bottom" id="mirrorBottom">
+      <button class="mirror-scan-btn" id="mirrorScanBtn" type="button">분석하기</button>
+    </div>
+    <aside class="analysis-card" id="analysisCard" hidden>
+      <h3>햇님의 거울 분석</h3>
+      <p class="analysis-line" id="analysisLine"></p>
+      <dl class="analysis-dl">
+        <div><dt>지금 자외선</dt><dd id="analysisUv"></dd></div>
+        <div><dt>추천 강도</dt><dd id="analysisSpf"></dd></div>
+        <div><dt>바르는 양</dt><dd>얼굴 기준 손가락 두 마디 / 500원 동전 크기</dd></div>
+        <div><dt>방어막</dt><dd id="analysisShield"></dd></div>
+        <div><dt>그을림 참고</dt><dd id="analysisBurn"></dd></div>
+        <div><dt>빛 세기</dt><dd id="analysisLight"></dd></div>
+      </dl>
+      <p class="analysis-limits">이마·코·볼·귀·목 표시는 바르는 위치 가이드예요. 모자·선글라스·피부 타입·나이·성별·선크림 여부를 알아보지는 않아요.</p>
+      <div class="analysis-actions">
+        <button type="button" id="mirrorRescan">다시 분석</button>
+        <button type="button" class="analysis-close" id="analysisClose">닫기</button>
+      </div>
+    </aside>
+  </div>
+
+  <div class="celebrate" id="celebrate" aria-hidden="true"></div>
+  <div class="pop" id="pop">잘했어요! 방어막 2시간 시작</div>
+  <script src="./app.js"></script>
+</body>
+</html>
