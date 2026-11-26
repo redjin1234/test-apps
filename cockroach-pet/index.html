@@ -47,7 +47,7 @@
 
 <div id="app">
   <header class="top">
-    <svg class="top-roach"><use href="#i-roach-mini"/></svg>
+    <img class="top-roach" src="assets/roach-mini.webp" alt="" draggable="false">
     <h1>바퀴벌레 쓰담쓰담 시뮬레이터</h1>
     <button class="rating" id="ratingBtn" aria-label="평점 4.8"><svg class="ic"><use href="#i-heart"/></svg><b>4.8</b><svg class="ic leaf"><use href="#i-leaf"/></svg></button>
   </header>
@@ -82,22 +82,18 @@
           <div id="petSquish" class="pet-squish">
             <div id="pet" class="roach" role="img" aria-label="바퀴벌레">
               <div class="roach-art" id="roachArt">
-                <img class="lyr leg lL3" src="assets/roach-lL3.webp" alt="" draggable="false">
-                <img class="lyr leg lR3" src="assets/roach-lR3.webp" alt="" draggable="false">
-                <img class="lyr leg lL2" src="assets/roach-lL2.webp" alt="" draggable="false">
-                <img class="lyr leg lR2" src="assets/roach-lR2.webp" alt="" draggable="false">
-                <img class="lyr leg lL1" src="assets/roach-lL1.webp" alt="" draggable="false">
-                <img class="lyr leg lR1" src="assets/roach-lR1.webp" alt="" draggable="false">
-                <img class="lyr ant antL" src="assets/roach-antL.webp" alt="" draggable="false">
-                <img class="lyr ant antR" src="assets/roach-antR.webp" alt="" draggable="false">
-                <img class="lyr body" src="assets/roach-body.webp" alt="" draggable="false">
-                <svg class="roach-fx" viewBox="0 0 512 750" aria-hidden="true">
+                <img class="lyr body" src="assets/roach.webp" alt="" draggable="false">
+                <svg class="roach-fx" viewBox="0 0 512 432" aria-hidden="true">
                   <g class="lids">
-                    <path d="M 199 186 A 18 15 0 0 1 234 186"/>
-                    <path d="M 284 186 A 18 15 0 0 1 319 186"/>
+                    <g transform="rotate(18 180 248)">
+                      <path d="M 150 244 A 30 14 0 0 1 210 244"/>
+                    </g>
+                    <g transform="rotate(18 321 294)">
+                      <path d="M 289 290 A 32 14 0 0 1 353 290"/>
+                    </g>
                   </g>
-                  <ellipse class="hit-back" cx="256" cy="490" rx="155" ry="255" fill="transparent"/>
-                  <ellipse class="hit-head" cx="256" cy="210" rx="118" ry="105" fill="transparent"/>
+                  <ellipse class="hit-back" cx="210" cy="175" rx="185" ry="145" transform="rotate(18 210 175)" fill="transparent"/>
+                  <ellipse class="hit-head" cx="268" cy="280" rx="125" ry="95" transform="rotate(18 268 280)" fill="transparent"/>
                 </svg>
               </div>
             </div>

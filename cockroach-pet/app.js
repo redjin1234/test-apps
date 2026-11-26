@@ -274,10 +274,10 @@ $('lvUp').addEventListener('click', closeLvUp);
 let pose = { dx: 0, dy: 0, rot: 0, s: 1 };
 let annoyedUntil = 0, eatingUntil = 0;
 const dims = {};
-const BASE_ROT = 200;
+const BASE_ROT = 0;
 function layout() {
   const w = stage.clientWidth, h = stage.clientHeight;
-  const ph = clamp(h * .78, 160, 325), pw = ph * 512 / 750;
+  const ph = clamp(h * .68, 148, 275), pw = ph * 512 / 432;
   stage.style.setProperty('--ph', ph + 'px'); stage.style.setProperty('--pw', pw + 'px');
   petPos.style.setProperty('--ph', ph + 'px'); pet.style.setProperty('--pw', pw + 'px'); pet.style.setProperty('--ph', ph + 'px');
   Object.assign(dims, { w, h, pw, ph, mx: Math.max(36, (w - pw * .55) / 2), my: Math.max(24, (h - ph * .6) / 2) });
@@ -297,11 +297,13 @@ function wander() {
   const now = performance.now();
   if (now > annoyedUntil && now > eatingUntil && !drag && !feedBusy) {
     const kind = Math.random();
-    const next = {
-      dx: clamp(pose.dx + rand(-70, 70), -dims.mx * .55, dims.mx * .55),
-      dy: clamp(pose.dy + rand(-28, 28), -dims.my * .45, dims.my * .45),
-      rot: clamp(pose.rot + rand(-16, 16), -18, 18), s: 1,
-    };
+    const ndx = clamp(pose.dx + rand(-70, 70), -dims.mx * .55, dims.mx * .55);
+    const ndy = clamp(pose.dy + rand(-28, 28), -dims.my * .45, dims.my * .45);
+    let rot = Math.atan2(ndy - pose.dy, ndx - pose.dx) * 180 / Math.PI - 35;
+    while (rot > 180) rot -= 360;
+    while (rot < -180) rot += 360;
+    rot = clamp(rot, -22, 22);
+    const next = { dx: ndx, dy: ndy, rot, s: 1 };
     if (kind < 0.28) {
       setPose({ dx: pose.dx, dy: pose.dy, rot: pose.rot + rand(-5, 5), s: 1 }, false);
     } else if (kind < 0.72) {
@@ -625,8 +627,7 @@ setInterval(() => {
 }, 1000);
 setInterval(() => { if (dirty) save(); }, 2500);
 setInterval(() => {
-  if (Math.random() < .6) { const l = pick(['lL1', 'lL2', 'lL3', 'lR1', 'lR2', 'lR3']), g = pet.querySelector('.' + l); anim(g, 'tw', 420); }
-  if (Math.random() < .5) { const a = pick(['antL', 'antR']), g = pet.querySelector('.' + a); anim(g, 'tw', 300); }
+  if (Math.random() < .55) { const g = pet.querySelector('.body'); anim(g, 'tw', 420); }
 }, 2300);
 document.addEventListener('visibilitychange', () => { if (document.hidden) save(); });
 addEventListener('pagehide', save);
